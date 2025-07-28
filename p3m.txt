@@ -1,0 +1,21 @@
+profil menu
+gambar - pimpinan lembaga
+gambar - struktur organisasi
+
+penelitian menu:
+artikel  - informasi penelitian
+link file -  panduan penelitian
+link file - SK Rektor penelitian
+link file creatable -  Dokumen penelitian
+
+Pengabdian Kepada masyarakat menu
+artikel -  informasi pengabdian pada masyarakat
+artikel & link file -  program pengabdian kepada masyarakat mandiri
+link file -  panduan pengabdian kepada masyarakat
+link file -  sk rektor pengabdian kepada masyarakat
+link file -  Dokumen Penting Pengabdian Kepada Masyarakat
+
+informasi KKN menu
+artikel -  informasi kkn unair
+link file -  buku panduan kkn bbm
+link file -  SK Rektor Pelaksanaan KKN BBK Universitas Airlangga

@@ -1,42 +1,47 @@
+// 1. Panggil dotenv.config() PERTAMA KALI
 const dotenv = require("dotenv");
+dotenv.config();
+
+// 2. Impor modul-modul lain
 const express = require("express");
-const db = require("./models/index");
-const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const db = require("./models/index");
+const AdminRoutes = require("./routes/adminRoutes");
+const AuthRoutes = require("./routes/authRoutes");
+const FileRoutes = require("./routes/fileRoutes");
+const ArticleRoutes = require("./routes/articleRoutes");
+const ProfileRoutes = require("./routes/profileRoutes");
+const CatDokumenPenRoutes = require("./routes/catDokumenPenRoutes");
+const path = require("path");
 
-app.use(cookieParser());
+const app = express();
+
+// 3. Gunakan middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
-dotenv.config();
+app.use(cookieParser());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// 4. Definisikan rute Anda
+app.use("/api/admins", AdminRoutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/files", FileRoutes);
+app.use("/api/article", ArticleRoutes);
+app.use("/api/profile", ProfileRoutes);
+app.use("/api/catdokumenpen", CatDokumenPenRoutes);
+
 const PORT = process.env.PORT || 3000;
-
-app.get("/", (req, res) => {
-  res.send("Hello, World! Server API sudah berjalan.");
-});
-
-app.get("/users", async (req, res) => {
-  try {
-    const users = await db.User.findAll();
-    res.status(200).json(users);
-  } catch (error) {
-    console.error("Error mengambil data user:", error);
-    res.status(500).json({ message: "Terjadi kesalahan pada server." });
-  }
-});
-
 app.listen(PORT, async () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
   try {
     await db.sequelize.authenticate();
     console.log("Koneksi ke database berhasil.");
-    console.log("=== DEBUG ENV VARIABLES ===");
-    console.log("DB_NAME:", process.env.DB_NAME);
   } catch (error) {
     console.error("Tidak dapat terhubung ke database:", error);
   }

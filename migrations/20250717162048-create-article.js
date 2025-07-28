@@ -31,13 +31,19 @@ module.exports = {
         defaultValue: Sequelize.NOW,
         allowNull: false,
       },
-      author_id: {
-        type: Sequelize.INTEGER,
+      author: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: "Admins",
-          key: "id",
-        },
+      },
+      category: {
+        type: Sequelize.ENUM,
+        values: [
+          "informasi_kkn",
+          "informasi_pengabdian_masyarakat",
+          "informasi_pengabdian_masyarakat_mandiri",
+          "informasi_penelitian",
+          "umum",
+        ],
       },
       createdAt: {
         allowNull: false,

@@ -7,19 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-
-      Article.belongsTo(models.Admin, {
-        foreignKey: "author_id",
-        as: "authorDetails",
-      });
-
-      Article.belongsTo(models.Category, {
-        foreignKey: "category_id",
-        as: "categoryDetails",
-      });
-    }
+    static associate(models) {}
   }
   Article.init(
     {
@@ -42,19 +30,25 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
-      author_id: {
-        type: DataTypes.INTEGER,
+      author: {
+        type: DataTypes.STRING,
         allowNull: false,
-        references: {
-          model: Model.Admin,
-          key: "id",
-        },
+      },
+      category: {
+        type: DataTypes.ENUM,
+        values: [
+          "informasi_kkn",
+          "informasi_pengabdian_masyarakat",
+          "informasi_pengabdian_masyarakat_mandiri",
+          "informasi_penelitian",
+          "umum",
+        ],
       },
     },
     {
       sequelize,
       modelName: "Article",
-      tableName: "Articles",
+      tableName: "articles",
     }
   );
   return Article;
