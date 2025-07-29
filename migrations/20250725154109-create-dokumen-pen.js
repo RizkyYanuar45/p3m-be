@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      catdokumenpeId: {
+      catdokumenpenId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

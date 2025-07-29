@@ -1,5 +1,6 @@
-const catdokumenpen = require("../models/catdokumenpen");
-const dokumenpen = require("./../models/dokumenpen");
+const db = require("./../models");
+const catdokumenpen = db.catDokumenPen;
+const dokumenpen = db.dokumenPen;
 
 exports.getAllDokumenPen = async (req, res) => {
   try {
@@ -7,8 +8,8 @@ exports.getAllDokumenPen = async (req, res) => {
       include: [
         {
           model: catdokumenpen,
-          as: "kategori_dokumen",
-          attributes: ["name"],
+          as: "kategori",
+          attributes: ["name", "id"],
         },
       ],
     });
@@ -25,8 +26,8 @@ exports.getDokumenPenById = async (req, res) => {
       include: [
         {
           model: catdokumenpen,
-          as: "kategori_dokumen",
-          attributes: ["name"],
+          as: "kategori",
+          attributes: ["name", "id"],
         },
       ],
     });

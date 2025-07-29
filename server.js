@@ -13,6 +13,7 @@ const FileRoutes = require("./routes/fileRoutes");
 const ArticleRoutes = require("./routes/articleRoutes");
 const ProfileRoutes = require("./routes/profileRoutes");
 const CatDokumenPenRoutes = require("./routes/catDokumenPenRoutes");
+const DokumenPenRoutes = require("./routes/dokumenPenRoutes");
 const path = require("path");
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api/files", FileRoutes);
 app.use("/api/article", ArticleRoutes);
 app.use("/api/profile", ProfileRoutes);
 app.use("/api/catdokumenpen", CatDokumenPenRoutes);
+app.use("/api/dokumenpen", DokumenPenRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
