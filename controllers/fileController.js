@@ -28,6 +28,26 @@ exports.getFileById = async (req, res) => {
       .json({ message: "Error fetching file", error: error.message });
   }
 };
+exports.getFileByType = async (req, res) => {
+  try {
+    const { type } = req.query;
+
+    if (!type) {
+      return res
+        .status(400)
+        .json({ message: "Query parameter 'type' is required" });
+    }
+
+    const files = await File.findAll({ where: { file_type: type } });
+
+    res.status(200).json(files);
+  } catch (error) {
+    console.error("Error fetching files by type:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching files by type", error: error.message });
+  }
+};
 exports.createFile = async (req, res) => {
   try {
     const file = await File.create(req.body);

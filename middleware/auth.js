@@ -1,4 +1,3 @@
-const cookieParser = require("cookie-parser");
 const db = require("./../models");
 const jwt = require("jsonwebtoken");
 const Admin = db.Admin;

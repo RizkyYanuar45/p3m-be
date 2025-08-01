@@ -4,6 +4,7 @@ const { protectAdmin } = require("./../middleware/auth");
 
 const {
   getAllFiles,
+  getFileByType,
   getFileById,
   createFile,
   updateFile,
@@ -11,6 +12,7 @@ const {
 } = require("./../controllers/fileController");
 
 router.get("/", getAllFiles);
+router.get("/type", getFileByType);
 router.get("/:id", getFileById);
 router.post("/add", protectAdmin, createFile);
 router.patch("/update/:id", protectAdmin, updateFile);

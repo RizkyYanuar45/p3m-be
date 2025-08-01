@@ -5,12 +5,14 @@ const { protectAdmin } = require("./../middleware/auth");
 const {
   getAllProfiles,
   getProfileById,
+  getProfilebyType,
   createProfile,
   updateProfile,
   deleteProfile,
 } = require("./../controllers/profileController");
 const upload = require("../middleware/upload");
 
+router.get("/type", getProfilebyType);
 router.get("/", getAllProfiles);
 router.get("/:id", getProfileById);
 router.post("/add", protectAdmin, upload.single("image"), createProfile);

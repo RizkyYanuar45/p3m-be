@@ -4,6 +4,7 @@ dotenv.config();
 
 // 2. Impor modul-modul lain
 const express = require("express");
+
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const db = require("./models/index");
@@ -14,6 +15,8 @@ const ArticleRoutes = require("./routes/articleRoutes");
 const ProfileRoutes = require("./routes/profileRoutes");
 const CatDokumenPenRoutes = require("./routes/catDokumenPenRoutes");
 const DokumenPenRoutes = require("./routes/dokumenPenRoutes");
+const DokumenPengabRoutes = require("./routes/dokumenPengabRoutes");
+const CatDokumenPengabRoutes = require("./routes/catDokumenPengabRoutes");
 const path = require("path");
 
 const app = express();
@@ -27,6 +30,7 @@ app.use(
     credentials: true,
   })
 );
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // 4. Definisikan rute Anda
@@ -37,6 +41,8 @@ app.use("/api/article", ArticleRoutes);
 app.use("/api/profile", ProfileRoutes);
 app.use("/api/catdokumenpen", CatDokumenPenRoutes);
 app.use("/api/dokumenpen", DokumenPenRoutes);
+app.use("/api/dokumenpengab", DokumenPengabRoutes);
+app.use("/api/catdokumenpengab", CatDokumenPengabRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {

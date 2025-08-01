@@ -1,24 +1,22 @@
 const db = require("./../models");
-const fs = require("fs").promises; // Gunakan fs.promises untuk async/await
-const path = require("path");
-const catDokumenPen = db.catDokumenPen;
-const dokumenPen = db.dokumenPen;
+const catDokumenPengab = db.catDokumenPengab;
+const dokumenPengab = db.dokumenPengab;
 
-exports.getAllCatDokumenPen = async (req, res) => {
+exports.getAllCatDokumenPengab = async (req, res) => {
   try {
-    const catdokumenpen = await catDokumenPen.findAll();
+    const catdokumenpen = await catDokumenPengab.findAll();
     res.json(catdokumenpen);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-exports.getAllCatDokumenPenWithHisDokumen = async (req, res) => {
+exports.getAllCatDokumenPengabWithHisDokumen = async (req, res) => {
   try {
-    const catdokumenpen = await catDokumenPen.findAll({
+    const catdokumenpen = await catDokumenPengab.findAll({
       include: [
         {
-          model: dokumenPen,
+          model: dokumenPengab,
           as: "dokumen",
           attributes: ["file_name", "file_url", "id"],
         },
@@ -30,14 +28,14 @@ exports.getAllCatDokumenPenWithHisDokumen = async (req, res) => {
   }
 };
 
-exports.getCatDokumenPenById = async (req, res) => {
+exports.getCatDokumenPengabById = async (req, res) => {
   try {
     const id = req.params.id;
-    const catdokumenpen = await catDokumenPen.findOne({
+    const catdokumenpen = await catDokumenPengab.findOne({
       where: { id: id },
       include: [
         {
-          model: dokumenPen,
+          model: dokumenPengab,
           as: "dokumenpens",
           attributes: ["file_name", "file_url", "id"],
         },
@@ -52,18 +50,18 @@ exports.getCatDokumenPenById = async (req, res) => {
   }
 };
 
-exports.createCatDokumenPen = async (req, res) => {
+exports.createCatDokumenPengab = async (req, res) => {
   try {
-    const catdokumenpen = await catDokumenPen.create(req.body);
+    const catdokumenpen = await catDokumenPengab.create(req.body);
     res.json(catdokumenpen);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-exports.updateCatDokumenPen = async (req, res) => {
+exports.updateCatDokumenPengab = async (req, res) => {
   try {
-    const catdokumenpen = await catDokumenPen.update(req.body, {
+    const catdokumenpen = await catDokumenPengab.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -74,9 +72,9 @@ exports.updateCatDokumenPen = async (req, res) => {
   }
 };
 
-exports.deleteCatDokumenPen = async (req, res) => {
+exports.deleteCatDokumenPengab = async (req, res) => {
   try {
-    await catDokumenPen.destroy({
+    await catDokumenPengab.destroy({
       where: {
         id: req.params.id,
       },

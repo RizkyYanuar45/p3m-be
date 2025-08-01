@@ -28,7 +28,14 @@ exports.createProfile = async (req, res) => {
   try {
     // 1. Ambil data teks dari req.body
     const { alt, type } = req.body;
-
+    const isAlreadyExists = await Profile.findOne({
+      where: { type: req.body.type },
+    });
+    if (isAlreadyExists) {
+      return res.status(400).json({
+        message: `Foto Sudah ada , silahkan ubah atau hapus foto sebelumnya`,
+      });
+    }
     // 2. Ambil path gambar dari req.file (jika ada)
     const imagePath = req.file ? req.file.path : null;
 
@@ -138,5 +145,32 @@ exports.deleteProfile = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting profile", error: error.message });
+  }
+};
+exports.getProfilebyType = async (req, res) => {
+  try {
+    const { type } = req.query;
+
+    if (!type) {
+      return res
+        .status(400)
+        .json({ message: "Query parameter 'type' is required" });
+    }
+
+    const profiles = await Profile.findAll({ where: { type: type } });
+
+    if (profiles.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No profiles found for this type" });
+    }
+
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error("Error fetching profiles by type:", error);
+    res.status(500).json({
+      message: "Error fetching profiles by type",
+      error: error.message,
+    });
   }
 };
