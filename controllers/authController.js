@@ -23,13 +23,13 @@ const loginAdmin = async (req, res) => {
       { id: admin.id, email: admin.email },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "10h",
       }
     );
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000, // 1 hour
+      maxAge: 36000000, // 1 hour
     });
     res.status(200).json({ message: "Login successful", admin });
   } catch (error) {

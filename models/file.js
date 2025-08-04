@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
           "panduan_pengabdian_masyarakat",
           "sk_rektor_pengabdian_masyarakat",
           "dokumen_penting_pengabdian_masyarakat",
-          "panduan_kkn_bbm",
-          "sk_rektor_pelaksanaan_kkn_bbm",
+          "panduan_kkn_tematik",
+          "sk_rektor_pelaksanaan_kkn_tematik",
           "panduan_kkn_pmm",
           "sk_rektor_pelaksanaan_kkn_pmm"
         ),
