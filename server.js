@@ -11,12 +11,16 @@ const db = require("./models/index");
 const AdminRoutes = require("./routes/adminRoutes");
 const AuthRoutes = require("./routes/authRoutes");
 const FileRoutes = require("./routes/fileRoutes");
+const YoutubeRoutes = require("./routes/youtubeRoutes");
 const ArticleRoutes = require("./routes/articleRoutes");
 const ProfileRoutes = require("./routes/profileRoutes");
 const CatDokumenPenRoutes = require("./routes/catDokumenPenRoutes");
 const DokumenPenRoutes = require("./routes/dokumenPenRoutes");
 const DokumenPengabRoutes = require("./routes/dokumenPengabRoutes");
 const CatDokumenPengabRoutes = require("./routes/catDokumenPengabRoutes");
+const CatDokumenProfRoutes = require("./routes/catDokumenProfRoutes");
+const FormRoutes = require("./routes/formRoutes");
+const DokumenProfRoutes = require("./routes/dokumenProfRoutes");
 const path = require("path");
 
 const app = express();
@@ -43,6 +47,10 @@ app.use("/api/catdokumenpen", CatDokumenPenRoutes);
 app.use("/api/dokumenpen", DokumenPenRoutes);
 app.use("/api/dokumenpengab", DokumenPengabRoutes);
 app.use("/api/catdokumenpengab", CatDokumenPengabRoutes);
+app.use("/api/catdokumenprof", CatDokumenProfRoutes);
+app.use("/api/dokumenprof", DokumenProfRoutes);
+app.use("/api/forms", FormRoutes);
+app.use("/api/youtube", YoutubeRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
