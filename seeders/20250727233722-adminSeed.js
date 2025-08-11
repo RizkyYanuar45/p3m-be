@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt"); // 1. Impor bcrypt
 module.exports = {
   async up(queryInterface, Sequelize) {
     // 2. Hash password sebelum dimasukkan
-    const hashedPassword = await bcrypt.hash("password123", 10); // Ganti 'password123' dengan password default Anda
+    const hashedPassword = await bcrypt.hash("password123", 10);
 
     await queryInterface.bulkInsert(
       "admins",
