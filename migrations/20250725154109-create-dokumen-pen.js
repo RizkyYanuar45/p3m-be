@@ -21,7 +21,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "catdokumenpens",
+          // ✅ UBAH DI SINI: Samakan huruf besar/kecilnya
+          model: "catDokumenPens",
           key: "id",
         },
       },
