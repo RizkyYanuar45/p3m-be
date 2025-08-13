@@ -31,6 +31,7 @@ const loginAdmin = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "None",
       path: "/",
+      domain: process.env.DOMAIN,
       maxAge: 36000000, // 10 hour
     });
     res.status(200).json({ message: "Login successful", admin });
