@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendMail = require("../helper/sendMail");
-const cookieParser = require("cookie-parser");
 
 const Admin = db.Admin;
 
@@ -15,10 +14,12 @@ const loginAdmin = async (req, res) => {
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
+
     const isPasswordValid = await bcrypt.compare(password, admin.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid password" });
     }
+
     const token = jwt.sign(
       { id: admin.id, email: admin.email },
       process.env.JWT_SECRET,
@@ -26,15 +27,37 @@ const loginAdmin = async (req, res) => {
         expiresIn: "10h",
       }
     );
-    res.cookie("token", token, {
+
+    // Fixed cookie configuration
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      maxAge: 36000000, // 10 hours in milliseconds
       path: "/",
-      domain: process.env.DOMAIN,
-      maxAge: 36000000, // 10 hour
+    };
+
+    // Development vs Production cookie settings
+    if (process.env.NODE_ENV === "production") {
+      cookieOptions.secure = true;
+      cookieOptions.sameSite = "None";
+      if (process.env.DOMAIN) {
+        cookieOptions.domain = process.env.DOMAIN;
+      }
+    } else {
+      // Development settings
+      cookieOptions.secure = false;
+      cookieOptions.sameSite = "Lax";
+    }
+
+    res.cookie("token", token, cookieOptions);
+
+    res.status(200).json({
+      message: "Login successful",
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        // Don't send password or sensitive data
+      },
     });
-    res.status(200).json({ message: "Login successful", admin });
   } catch (error) {
     console.error(error);
     res
@@ -45,7 +68,24 @@ const loginAdmin = async (req, res) => {
 
 const logoutAdmin = (req, res) => {
   try {
-    res.clearCookie("token");
+    // Clear cookie with same options as when it was set
+    const cookieOptions = {
+      httpOnly: true,
+      path: "/",
+    };
+
+    if (process.env.NODE_ENV === "production") {
+      cookieOptions.secure = true;
+      cookieOptions.sameSite = "None";
+      if (process.env.DOMAIN) {
+        cookieOptions.domain = process.env.DOMAIN;
+      }
+    } else {
+      cookieOptions.secure = false;
+      cookieOptions.sameSite = "Lax";
+    }
+
+    res.clearCookie("token", cookieOptions);
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     console.error(error);
@@ -59,12 +99,14 @@ const resetPasswordAdmin = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ message: "Email are required" });
+      return res.status(400).json({ message: "Email is required" });
     }
+
     const admin = await Admin.findOne({ where: { email: email } });
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     const expiredAt = new Date();
     expiredAt.setHours(expiredAt.getHours() + 1);
@@ -73,18 +115,21 @@ const resetPasswordAdmin = async (req, res) => {
       { reset_token: resetToken, reset_token_expired: expiredAt },
       { where: { id: admin.id } }
     );
+
     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
     const htmlMessage = `
       <p>Click the link below to reset your password:</p>
-        <a href="${resetLink}">Reset Password</a>
-        <p>This link will expire in 1 hour.</p>
+      <a href="${resetLink}">Reset Password</a>
+      <p>This link will expire in 1 hour.</p>
     `;
+
     await sendMail({
       to: email,
       subject: "Password Reset Request",
       html: htmlMessage,
       isHtml: true,
     });
+
     res.status(200).json({ message: "Password reset link sent to email" });
   } catch (error) {
     console.error(error);
@@ -97,18 +142,25 @@ const resetPasswordAdmin = async (req, res) => {
 const verifyResetToken = async (req, res) => {
   try {
     const { token } = req.params;
+
     const admin = await Admin.findOne({
       where: {
         reset_token: token,
       },
     });
+
     if (!admin) {
       return res.status(404).json({ message: "Invalid reset token" });
     }
+
     const now = new Date();
     if (admin.reset_token_expired && now > admin.reset_token_expired) {
-      return ResponseAPI.error(res, "Link reset password sudah expired", 400);
+      return res
+        .status(400)
+        .json({ message: "Reset password link has expired" });
     }
+
+    res.status(200).json({ message: "Token is valid" });
   } catch (error) {
     console.error(error);
     res
@@ -121,18 +173,30 @@ const changePasswordWithToken = async (req, res) => {
   try {
     const { token } = req.params;
     const { newPassword } = req.body;
+
     if (!newPassword) {
       return res.status(400).json({ message: "New password is required" });
     }
+
     const admin = await Admin.findOne({
       where: {
         reset_token: token,
       },
     });
+
     if (!admin) {
       return res.status(404).json({ message: "Invalid reset token" });
     }
+
+    const now = new Date();
+    if (admin.reset_token_expired && now > admin.reset_token_expired) {
+      return res
+        .status(400)
+        .json({ message: "Reset password link has expired" });
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+
     await Admin.update(
       {
         password: hashedPassword,
@@ -141,10 +205,13 @@ const changePasswordWithToken = async (req, res) => {
       },
       { where: { id: admin.id } }
     );
+
     res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 
