@@ -29,7 +29,7 @@ const loginAdmin = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      sameSite: "Lax",
       path: "/", // Path root agar cookie berlaku di seluruh situs
       maxAge: 36000000, // 10 hour
     });
