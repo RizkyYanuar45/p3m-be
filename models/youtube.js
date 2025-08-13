@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Youtube",
-      tableName: "youtubes",
+      tableName: "Youtubes",
     }
   );
   return Youtube;
