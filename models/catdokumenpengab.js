@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "catDokumenPengab",
-      tableName: "catdokumenpengabs",
+      tableName: "catDokumenPengabs",
     }
   );
   return catDokumenPengab;
