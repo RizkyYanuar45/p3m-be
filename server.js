@@ -49,6 +49,12 @@ app.use(
     credentials: true,
   })
 );
+
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsAsie);
+  console.log("Folder 'uploads' berhasil dibuat.");
+}
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
