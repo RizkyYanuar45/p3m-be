@@ -1,7 +1,7 @@
 // 1. Panggil dotenv.config() PERTAMA KALI
 const dotenv = require("dotenv");
 dotenv.config();
-
+const fs = require("fs");
 // 2. Impor modul-modul lain
 const express = require("express");
 
