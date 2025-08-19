@@ -10,16 +10,16 @@ const {
   updateProfile,
   deleteProfile,
 } = require("./../controllers/profileController");
-const upload = require("../middleware/upload");
+const uploadAndCompress = require("../middleware/upload");
 
 router.get("/type", getProfilebyType);
 router.get("/", getAllProfiles);
 router.get("/:id", getProfileById);
-router.post("/add", protectAdmin, upload.single("image"), createProfile);
+router.post("/add", protectAdmin, uploadAndCompress("image"), createProfile);
 router.patch(
   "/update/:id",
   protectAdmin,
-  upload.single("image"),
+  uploadAndCompress("image"),
   updateProfile
 );
 router.delete("/delete/:id", protectAdmin, deleteProfile);

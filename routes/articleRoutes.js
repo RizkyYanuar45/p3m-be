@@ -10,16 +10,21 @@ const {
   deleteArticle,
 } = require("./../controllers/articleController");
 const { protectAdmin } = require("../middleware/auth");
-const upload = require("../middleware/upload");
+const uploadAndCompress = require("../middleware/upload");
 
 router.get("/", getAllArticles);
 router.get("/slug/:slug", getArticleBySlug);
 router.get("/type/:type", getArticlesByType);
-router.post("/add", protectAdmin, upload.single("thumbnail"), createArticle);
+router.post(
+  "/add",
+  protectAdmin,
+  uploadAndCompress("thumbnail"),
+  createArticle
+);
 router.patch(
   "/update/:id",
   protectAdmin,
-  upload.single("thumbnail"),
+  uploadAndCompress("thumbnail"),
   updateArticle
 );
 router.delete("/delete/:id", protectAdmin, deleteArticle);
