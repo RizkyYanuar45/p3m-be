@@ -3,10 +3,10 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 
-// Simpan file ke memori untuk diproses oleh sharp
+// 1. Konfigurasi multer untuk menyimpan file sementara di memori (RAM)
 const storage = multer.memoryStorage();
 
-// Filter file untuk memastikan hanya gambar yang diunggah
+// 2. Filter untuk memastikan hanya file gambar yang diterima
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = [
     "image/jpeg",
@@ -21,43 +21,48 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Middleware multer awal yang menangani upload ke memori dengan batas 3 MB
+// 3. Middleware multer awal yang menangani upload ke memori dengan batas 3 MB
 const upload = multer({
   storage: storage,
   limits: {
-    // ✅ UBAH DI SINI: Batas ukuran file asli sebelum kompresi adalah 3 MB
-    fileSize: 3 * 1024 * 1024,
+    fileSize: 3 * 1024 * 1024, // Batas file: 3 MB
   },
   fileFilter: fileFilter,
 });
 
-// Middleware kedua untuk kompresi dengan Sharp
+// 4. Middleware kedua untuk kompresi dan penyimpanan gambar dengan Sharp
 const compressAndSaveImage = async (req, res, next) => {
+  // Jika tidak ada file yang di-upload, lanjutkan ke controller berikutnya
   if (!req.file) {
     return next();
-  }
+  } // Buat nama file unik dengan format .webp
 
   const newFilename = `${uuidv4()}.webp`;
+  // Path untuk menyimpan file di server (menggunakan path.join agar kompatibel)
   const outputPath = path.join("uploads", newFilename);
 
-  try {
-    await sharp(req.file.buffer)
-      .resize({ width: 1024, withoutEnlargement: true })
-      .toFormat("webp", { quality: 80 })
-      .toFile(outputPath);
+  // Path yang akan disimpan ke database (selalu menggunakan forward slash)
+  const databasePath = `uploads/${newFilename}`;
 
-    req.file.path = outputPath;
+  try {
+    // Proses kompresi dan penyimpanan file
+    await sharp(req.file.buffer)
+      .resize({ width: 1024, withoutEnlargement: true }) // Ubah lebar maks 1024px
+      .toFormat("webp", { quality: 80 }) // Konversi ke WebP kualitas 80%
+      .toFile(outputPath); // Simpan ke disk // Update objek req.file agar controller mendapatkan path yang benar
+
+    req.file.path = databasePath;
     req.file.filename = newFilename;
     req.file.mimetype = "image/webp";
 
-    next();
+    next(); // Lanjutkan ke controller
   } catch (error) {
     console.error("Error saat kompresi gambar:", error);
     return next(error);
   }
 };
 
-// Ekspor array middleware yang akan dijalankan berurutan
+// 5. Ekspor fungsi yang mengembalikan array middleware
 const uploadAndCompress = (fieldName) => [
   upload.single(fieldName),
   compressAndSaveImage,
