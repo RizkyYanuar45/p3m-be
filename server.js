@@ -25,42 +25,27 @@ const path = require("path");
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests from your frontend domains
-    const allowedOrigins = [
-      process.env.FRONTEND_URL,
-      "http://localhost:3000", // for development
-      "http://localhost:3001",
-      // Add other allowed origins
-    ];
+const allowedOrigins = [
+  "http://sdnmojosari.site",
+  "https://sdnmojosari.site",
+  "http://www.sdnmojosari.site",
+  "https://www.sdnmojosari.site",
+  // Tambahkan juga origin localhost untuk pengembangan lokal jika perlu
+  "http://localhost:5173",
+];
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true, // SANGAT PENTING untuk cookies
-  optionsSuccessStatus: 200,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: [
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization",
-    "Cache-Control",
-    "X-Access-Token",
-  ],
-};
 // 3. Gunakan middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Akses diblokir oleh kebijakan CORS"));
+      }
+    },
     credentials: true,
   })
 );
