@@ -52,7 +52,7 @@ app.use(
 
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsAsie);
+  fs.mkdirSync(uploadsDir);
   console.log("Folder 'uploads' berhasil dibuat.");
 }
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
