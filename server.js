@@ -50,14 +50,14 @@ app.use(
   })
 );
 
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-  console.log("Folder 'uploads' berhasil dibuat.");
-}
+// const uploadsDir = path.join(__dirname, "uploads");
+// if (!fs.existsSync(uploadsDir)) {
+//   fs.mkdirSync(uploadsDir);
+//   console.log("Folder 'uploads' berhasil dibuat.");
+// }
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // 4. Definisikan rute Anda
 app.use("/api/admins", AdminRoutes);
 app.use("/api/auth", AuthRoutes);
