@@ -21,11 +21,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// 3. Middleware multer awal yang menangani upload ke memori dengan batas 3 MB
+// 3. Middleware multer awal yang menangani upload ke memori dengan batas 10 MB
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 3 * 1024 * 1024, // Batas file: 3 MB
+    fileSize: 10 * 1024 * 1024, // Batas file: 10 MB
   },
   fileFilter: fileFilter,
 });
