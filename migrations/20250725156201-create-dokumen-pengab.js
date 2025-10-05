@@ -24,6 +24,7 @@ module.exports = {
           model: "catDokumenPengabs",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,

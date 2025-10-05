@@ -17,15 +17,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      type: {
-        type: Sequelize.ENUM(
-          "survey_kepuasan_p3m",
-          "survey_kepuasan_pengabdian_masyarakat",
-          "survey_kepuasan_penelitian",
-          "survey_kepuasan_kkn"
-        ),
-        allowNull: false,
-      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -26,7 +26,9 @@ module.exports = (sequelize, DataTypes) => {
           "dokumen_penting_pengabdian_masyarakat",
           "panduan_kkn_tematik",
           "sk_rektor_pelaksanaan_kkn_tematik",
+          "panduan_pengelolaan_jurnal_ilmiah",
           "panduan_kkn_pmm",
+          "panduan_kkn_pkn_bem",
           "sk_rektor_pelaksanaan_kkn_pmm"
         ),
         allowNull: false,

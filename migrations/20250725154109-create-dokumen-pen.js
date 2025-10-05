@@ -25,6 +25,7 @@ module.exports = {
           model: "catDokumenPens",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,

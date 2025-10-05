@@ -15,15 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       link: { type: DataTypes.STRING, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
-      type: {
-        type: DataTypes.ENUM(
-          "survey_kepuasan_p3m",
-          "survey_kepuasan_pengabdian_masyarakat",
-          "survey_kepuasan_penelitian",
-          "survey_kepuasan_kkn"
-        ),
-        allowNull: false,
-      },
     },
     {
       sequelize,

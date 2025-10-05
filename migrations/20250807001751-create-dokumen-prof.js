@@ -24,6 +24,7 @@ module.exports = {
           model: "catDokumenProfs",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,

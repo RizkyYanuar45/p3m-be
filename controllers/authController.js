@@ -6,9 +6,9 @@ const Admin = db.Admin;
 
 const loginAdmin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, password } = req.body;
 
-    const admin = await Admin.findOne({ where: { email: email } });
+    const admin = await Admin.findOne({ where: { name: name } });
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
@@ -19,7 +19,7 @@ const loginAdmin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: admin.id, email: admin.email },
+      { id: admin.id, name: admin.name },
       process.env.JWT_SECRET,
       {
         expiresIn: "10h",
@@ -52,7 +52,7 @@ const loginAdmin = async (req, res) => {
       message: "Login successful",
       admin: {
         id: admin.id,
-        email: admin.email,
+        name: admin.name,
         // Don't send password or sensitive data
       },
     });

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       catDokumenProf.hasMany(models.dokumenProf, {
         foreignKey: "catdokumenprofId",
         as: "dokumen",
+        onDelete: "CASCADE",
       });
     }
   }

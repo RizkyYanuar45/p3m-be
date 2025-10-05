@@ -11,7 +11,7 @@ module.exports = {
       "Admins",
       [
         {
-          name: "Super Admin",
+          name: "p3mUnim",
           email: "superadmin@gmail.com",
           password: hashedPassword, // 3. Gunakan password yang sudah di-hash
           createdAt: new Date(),
