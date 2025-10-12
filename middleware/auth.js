@@ -21,7 +21,7 @@ exports.protectAdmin = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Verify the token (this is a placeholder, implement your own verification logic)
-    const admin = await Admin.findOne({ where: { email: decoded.email } });
+    const admin = await Admin.findOne({ where: { name: decoded.name } });
     if (!admin) {
       return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
